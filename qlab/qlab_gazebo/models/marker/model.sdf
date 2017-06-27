@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+<sdf version="1.4">
+  <model name="Marker">
+    <pose>0 0 0.5 -1.57 0 0</pose>
+    <static>true</static>
+    <link name="link">
+      <inertial>
+        <mass>0.1</mass>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <box>
+            <size>10 10 10</size>
+          </box>
+        </geometry>
+      </collision>
+   
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <!--uri>model://marker/meshes/artag_01.dae</uri-->
+            <uri>model://marker/meshes/mbzirc.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+  </model>
+</sdf>

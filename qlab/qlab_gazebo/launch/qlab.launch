@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<launch>
+
+  <env name="GAZEBO_MODEL_PATH" value="$(find qlab_gazebo):$(optenv GAZEBO_MODEL_PATH)"/>
+
+  <arg name="use_sim_time" default="true"/>
+  <arg name="gui" default="true"/>
+  <arg name="spawn_drone" default="true" />
+
+  <!-- start up world -->
+  <include file="$(find qlab_gazebo)/launch/ardrone_sim_world.launch">
+  	<arg name="use_sim_time" value="$(arg use_sim_time)" />
+  	<arg name="gui" value="$(arg gui)" />
+  </include>
+
+
+  <!-- Spawn simulated quadrotor uav -->
+  <group if="$(arg spawn_drone)" ns="quadrotor">
+  	<include file="$(find qlab_gazebo)/launch/spawn_quadrotor.launch" >
+    		<arg name="model" value="$(find qlab_description)/urdf/quadrotor_sensors.urdf.xacro"/>
+  	</include>
+  </group>
+
+
+</launch>

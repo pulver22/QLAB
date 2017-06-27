@@ -1,0 +1,145 @@
+<?xml version="1.0"?>
+
+<robot xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor"
+xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller"
+xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface"
+xmlns:xacro="http://ros.org/wiki/xacro"
+>
+
+  <!-- Quadrotor Sensor Plugins
+
+        <frameId>ardrone_base_link</frameId>
+
+-->
+  <xacro:macro name="quadrotor_sensors">
+    <gazebo>
+      <plugin name="quadrotor_imu_sim" filename="libhector_gazebo_ros_imu.so">
+        <alwaysOn>true</alwaysOn>
+        <updateRate>100.0</updateRate>
+        <bodyName>base_link</bodyName>
+        <frameId>ardrone_base_link</frameId>
+        <topicName>ardrone/imu</topicName>
+        <rpyOffsets>0 0 0</rpyOffsets> <!-- deprecated -->
+        <gaussianNoise>0</gaussianNoise>  <!-- deprecated -->
+        <offset>0.0 0.0 0.0</offset>
+        <drift>0.0 0.0 0.0</drift>
+        <driftFrequency>0.0 0.0 0.0</driftFrequency>
+        <accelOffset>0 0 0</accelOffset>
+        <accelDrift>0.5 0.5 0.5</accelDrift>
+        <accelDriftFrequency>0.0 0.0 0.0</accelDriftFrequency>
+        <accelGaussianNoise>0.35 0.35 0.3</accelGaussianNoise>
+        <rateOffset>0.0 0.0 0.0</rateOffset>
+        <rateDrift>0.0 0.0 0.0</rateDrift>
+        <rateDriftFrequency>0.0 0.0 0.0</rateDriftFrequency>
+        <rateGaussianNoise>0.00 0.00 0.00</rateGaussianNoise>
+        <headingDrift>0.0</headingDrift>
+        <headingDriftFrequency>0.0</headingDriftFrequency>
+        <headingOffset>0.0</headingOffset>
+        <headingGaussianNoise>0.00</headingGaussianNoise>
+     </plugin>
+
+
+      <plugin name="quadrotor_baro_sim" filename="libhector_gazebo_ros_baro.so">
+        <alwaysOn>true</alwaysOn>
+        <updateRate>10.0</updateRate>
+        <bodyName>base_link</bodyName>
+        <topicName>pressure_height</topicName>
+        <altimeterTopicName>altimeter</altimeterTopicName>
+        <offset>0.0</offset>
+        <accelOffset>0.0</accelOffset>
+        <drift>0.1</drift>
+        <driftFrequency>0.0</driftFrequency>
+        <gaussianNoise>0.5</gaussianNoise>
+      </plugin>
+
+      <plugin name="quadrotor_magnetic_sim" filename="libhector_gazebo_ros_magnetic.so">
+        <alwaysOn>true</alwaysOn>
+        <updateRate>10.0</updateRate>
+        <bodyName>base_link</bodyName>
+        <topicName>magnetic</topicName>
+        <offset>0.0 0.0 0.0</offset>
+        <accelOffset>0.0 0.0 0.0</accelOffset>
+        <drift>0.0 0.0 0.0</drift>
+        <driftFrequency>0.0 0.0 0.0</driftFrequency>
+        <gaussianNoise>1.3e-2 1.3e-2 1.3e-2</gaussianNoise>
+      </plugin>
+
+      <plugin name="quadrotor_gps_sim" filename="libhector_gazebo_ros_gps.so">
+        <alwaysOn>true</alwaysOn>
+        <updateRate>4.0</updateRate>
+        <bodyName>base_link</bodyName>
+        <topicName>fix</topicName>
+        <offset>0.0 0.0 0.0</offset>
+        <accelOffset>0.0 0.0 0.0</accelOffset>
+        <velocityTopicName>fix_velocity</velocityTopicName>
+        <drift>5.0 5.0 5.0</drift>
+        <driftFrequency>0.0 0.0 0.0</driftFrequency>
+        <gaussianNoise>0.1 0.1 0.1</gaussianNoise>
+        <velocityDrift>0 0 0</velocityDrift>
+        <velocityOffset>0 0 0</velocityOffset>
+        <velocityDriftFrequency>0.0 0.0 0.0</velocityDriftFrequency>
+         <velocityGaussianNoise>0.1 0.1 0.1</velocityGaussianNoise>
+      </plugin>
+
+      <plugin name="quadrotor_groundtruth_sim" filename="libgazebo_ros_p3d.so">
+        <alwaysOn>true</alwaysOn>
+        <updateRate>100.0</updateRate>
+        <bodyName>base_link</bodyName>
+        <topicName>ground_truth/state</topicName>
+        <gaussianNoise>0.0</gaussianNoise>
+        <frameName>map</frameName>
+      </plugin>
+    </gazebo>
+
+    <gazebo reference="base_link">
+      <sensor name="quadrotor_contact_sensor_sim" type="contact">
+        <always_on>true</always_on>
+        <update_rate>100.0</update_rate>
+        <contact>
+          <collision>base_link_collision</collision>
+        </contact>
+        <plugin name="quadrotor_bumper_sim" filename="libgazebo_ros_bumper.so">
+          <bumperTopicName>ardrone/bumper</bumperTopicName>
+          <frameName>base_link</frameName>
+        </plugin>
+      </sensor>
+
+      <sensor type="ray" name="quadrotor_hokuyo_sensor_sim">
+        <pose>0 0 0.1 0 0 0</pose>
+        <always_on>true</always_on>
+        <visualize>false</visualize>
+        <update_rate>100</update_rate>
+        <ray>
+          <scan>
+            <horizontal>
+              <samples>9</samples>
+              <resolution>1</resolution>
+              <min_angle>-1.570796</min_angle>
+              <max_angle>1.570796</max_angle>
+            </horizontal>
+          </scan>
+          <range>
+            <min>0.10</min>
+            <max>30.0</max>
+            <resolution>0.01</resolution>
+          </range>
+          <noise>
+            <type>gaussian</type>
+            <!-- Noise parameters based on published spec for Hokuyo laser
+                 achieving "+-30mm" accuracy at range < 10m.  A mean of 0.0m and
+                 stddev of 0.01m will put 99.7% of samples within 0.03m of the true
+                 reading. -->
+            <mean>0.0</mean>
+            <stddev>0.01</stddev>
+          </noise>
+        </ray>
+        <plugin name="quadrotor_laser_sim" filename="libgazebo_ros_laser.so">
+          <alwaysOn>true</alwaysOn>
+          <update_rate>100.0</update_rate>
+          <topicName>ardrone/laser</topicName>
+          <frameName>base_link</frameName>
+        </plugin>
+      </sensor>
+    </gazebo>
+  </xacro:macro>
+</robot>

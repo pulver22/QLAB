@@ -1,0 +1,42 @@
+<?xml version="1.0"?><package>
+  <name>deep_reinforced_landing</name>
+  <version>1.0.0</version>
+  <description>Ros node for running training and testing simulation</description>
+
+  <author email="riccardo.polvara@plymouth.ac.uk">Riccardo Polvara</author>
+  <author email="massimiliano.patacchiola@plymouth.ac.uk">Massimiliano Patacchiola</author>
+
+  <license>BSD</license>
+
+  <maintainer email="riccardo.polvara@plymouth.ac.uk">Riccardo Polvara</maintainer>
+  <maintainer email="massimiliano.patacchiola@plymouth.ac.uk">Massimiliano Patacchiola</maintainer>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>roscpp</build_depend>
+  <build_depend>rospy</build_depend>
+  <build_depend>message_generation</build_depend>
+  <build_depend>geometry_msgs</build_depend>
+  <build_depend>sensor_msgs</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>gazebo_msgs</build_depend>
+  <build_depend>ardrone_autonomy</build_depend>
+  <build_depend>sensor_msgs</build_depend>
+  <build_depend>cv_bridge</build_depend>
+  <build_depend>image_transport</build_depend>
+  <build_depend>genmsg</build_depend>
+
+  <run_depend>rospy</run_depend>
+  <run_depend>roscpp</run_depend>
+  <run_depend>geometry_msgs</run_depend>
+  <run_depend>sensor_msgs</run_depend>
+  <run_depend>std_msgs</run_depend>
+  <run_depend>gazebo_msgs</run_depend>
+  <run_depend>ardrone_autonomy</run_depend>
+  <run_depend>message_runtime</run_depend>
+  <run_depend>sensor_msgs</run_depend>
+  <run_depend>cv_bridge</run_depend>
+  <run_depend>image_transport</run_depend>
+  <run_depend>genmsg</run_depend>
+
+</package>
