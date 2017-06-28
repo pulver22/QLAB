@@ -31,9 +31,9 @@ xmlns:xacro="http://ros.org/wiki/xacro"
         <!--motionSmallNoise>0.05</motionSmallNoise>
         <motionDriftNoise>0.03</motionDriftNoise>
         <motionDriftNoiseTime>5.0</motionDriftNoiseTime--> 
-        <motionSmallNoise>0</motionSmallNoise>
-        <motionDriftNoise>0</motionDriftNoise>
-        <motionDriftNoiseTime>0</motionDriftNoiseTime>
+        <motionSmallNoise>0.0</motionSmallNoise>
+        <motionDriftNoise>0.0</motionDriftNoise>
+        <motionDriftNoiseTime>0.0</motionDriftNoiseTime>
       </plugin>
 
       <plugin name="quadrotor_state_controller" filename="libhector_gazebo_quadrotor_state_controller.so">

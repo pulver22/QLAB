@@ -7,6 +7,9 @@
   <arg name="gui" default="true"/>
   <arg name="world" default="drl_world.world" />
   <arg name="spawn_drone" default="true" />
+  <arg name="motionSmallNoise" value="0.0"/>
+  <arg name="motionDriftNoise" value="0.0"/>
+  <arg name="motionDriftNoiseTime" value="0.0"/>
 
   <!-- start up world -->
   <include file="$(find qlab_gazebo)/launch/ardrone_sim_world.launch">
@@ -22,6 +25,20 @@
   	</include>
   </group>
 
-  <!-- Launch drl_services node for offering methods  -->
-  <node name="drl_node" pkg="deep_reinforced_landing" type="drl_services" output="screen"/>
+  <!-- Launch drl_services node for offering RL methods  -->
+  <node name="drl_node" pkg="deep_reinforced_landing" type="drl_services" output="screen">
+    <param name="bb_flight_half_size" value="1.5"/>
+    <param name="bb_flight_height" value="20.0"/>
+    <param name="bb_landing_half_size" value="1.5"/>
+    <param name="landing_bb_height" value="3.0"/>
+    <param name="respawn_height" value="20.0">
+    <param name="xy_gaussian_uniform" value="gaussian"/> <!-- choose between 'gaussian' or 'uniform' -->
+    <param name="xy_gaussian_mean" value="0.0"/>
+    <param name="xy_gaussian_stdev" value="0.75"/>
+    <param name="num_z_uniform" value="1"> <!-- change to 1 or 2-->
+    <param name="z_uniform_from" value="1.0"/>
+    <param name="z_uniform_to" value="20.0"/>
+    <param name="z_uniform_from_2" value="1.0"/>
+    <param name="z_uniform_to_2" value="4.0"/>
+  </node>
 </launch>

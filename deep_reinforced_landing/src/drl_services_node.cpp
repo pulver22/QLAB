@@ -160,6 +160,12 @@ private:
   double bb_landing_height_, bb_flight_height_;
   BoundingBox bb_landing_, bb_flight_;
   double respawn_height;
+  std::string xy_gaussian_uniform;
+  double xy_gaussian_mean;
+  double xy_gaussian_stdev;
+  int num_z_uniform;
+  double z_uniform_from, z_uniform_from_2;
+  double z_uniform_to, z_uniform_to_2;
 
   // Reinforcement Learning data
   bool done_;
@@ -234,18 +240,32 @@ DeepReinforcedLanding::DeepReinforcedLanding()
   service_send_command_ = nh_.advertiseService("drl/send_command", &DeepReinforcedLanding::sendCommand, this);
   service_relative_pose_ = nh_.advertiseService("drl/get_relative_pose", &DeepReinforcedLanding::getRelativePose, this);
   
+  // Load parameters from param server
+  nh_.getParam ("/drl/bb_flight_half_size", bb_flight_half_size_ );
+  nh_.getParam ("/drl/bb_flight_height", bb_flight_height_ );
+  nh_.getParam ("/drl/bb_landing_half_size", bb_landing_half_size_ );
+  nh_.getParam ("/drl/bb_landing_height", bb_landing_height_ );
+  nh_.getParam ("/drl/respawn_height", respawn_height );
+  nh_.getParam ("/drl/xy_gaussian_uniform", xy_gaussian_uniform );
+  nh_.getParam ("/drl/xy_gaussian_mean", xy_gaussian_mean );
+  nh_.getParam ("/drl/xy_gaussian_stdev", xy_gaussian_stdev );
+  nh_.getParam ("/drl/num_z_uniform", num_z_uniform );
+  nh_.getParam ("/drl/z_uniform_from", z_uniform_from );
+  nh_.getParam ("/drl/z_uniform_to", z_uniform_to );
+  nh_.getParam ("/drl/z_uniform_from_2", z_uniform_from_2 );
+  nh_.getParam ("/drl/z_uniform_to_2", z_uniform_to_2 );
 
   // With a flight BB having 15m per side, we need a minimum height of 20m for perceiving the marker
-  bb_flight_half_size_ = 6.5;
-  bb_flight_height_ = 20.0;
-  respawn_height = 19.9; // the height at which the UAV must be respawn
+  //bb_flight_half_size_ = 6.5;
+  //bb_flight_height_ = 20.0;
+  //respawn_height = 19.9; // the height at which the UAV must be respawn
   double bb_flight_volume = pow(2*bb_flight_half_size_,2) * bb_flight_height_;
   // The volume of the landing BB is 1/10 of the flight BB's one
   double bb_landing_volume = (bb_flight_volume / 10.0) * 2;
-  bb_landing_height_ = 3.0;
+  //bb_landing_height_ = 3.0;
   // Calculate the side of the landing BB's base and divide it by two
   //bb_landing_half_size_ = sqrt(bb_landing_volume / bb_flight_height_) / 2;
-  bb_landing_half_size_ = 1.5; // add math expression
+  //bb_landing_half_size_ = 1.5; // add math expression
   
 
 
@@ -450,46 +470,57 @@ gazebo_msgs::SetModelState DeepReinforcedLanding::getModelState()
   float tmp_x, tmp_y, tmp_z;
   std::random_device rd;
   std::mt19937 gen(rd());
-  std::normal_distribution<> gaussian_xy(0,0.75);  
-  
-  tmp_x = gaussian_xy(gen);
-  // Chose a random position outside the landing BB
-  // do
-  // {
-  //   tmp_x = -bb_flight_half_size_ + (2 * bb_flight_half_size_ * rand()) / (RAND_MAX + 1.0);  
-  // }while (std::abs(tmp_x) < bb_landing_half_size_);//spawn outside the landing BB
-  //tmp_x = -bb_flight_half_size_ + (2 * bb_flight_half_size_ * rand()) / (RAND_MAX + 1.0);  //spawn also inside the landing BB
-  set_model_state.request.model_state.pose.position.x = tmp_x;
-  
-
-  tmp_y = gaussian_xy(gen);
-  // do
-  // {
-  //   tmp_y = -bb_flight_half_size_ + (2 * bb_flight_half_size_ * rand()) / (RAND_MAX + 1.0);  
-  // }while (std::abs(tmp_y) < bb_landing_half_size_); //spawn outside the landing BB
-  //tmp_y = -bb_flight_half_size_ + (2 * bb_flight_half_size_ * rand()) / (RAND_MAX + 1.0);  //spawn also inside the landing BB
-  set_model_state.request.model_state.pose.position.y = tmp_y;
-
-
-  const float range_from  = 3.0;
-  const float range_to    = 20.0;
+  std::normal_distribution<> gaussian_xy(xy_gaussian_mean, xy_gaussian_stdev);  
   std::random_device                  rand_dev;
   std::mt19937                        generator(rand_dev());
-  std::uniform_real_distribution<float>  distr(range_from, range_to);
+  std::uniform_real_distribution<float>  xy_uniform(-bb_landing_half_size_, bb_landing_half_size_);
+  std::uniform_real_distribution<float>  z_uniform(z_uniform_from, z_uniform_to);
+  std::uniform_real_distribution<float>  z_uniform_2(z_uniform_from_2, z_uniform_to_2);
+  double coin = ((double) rand() / (RAND_MAX));
+  
+  if (xy_gaussian_uniform.compare("gaussian") == 0)
+  {
+    tmp_x = gaussian_xy(gen);
+    set_model_state.request.model_state.pose.position.x = tmp_x;
+    tmp_y = gaussian_xy(gen);
+    set_model_state.request.model_state.pose.position.y = tmp_y;
+  }
+  else if (xy_gaussian_uniform.compare("uniform") == 0)
+  {
+     tmp_x = xy_uniform(generator);
+     tmp_x = xy_uniform(generator);
+  } 
+  else 
+  {
+    std::cout << "A wrong distribution has been chosen (typo?)." << std::endl;
+    ros::shutdown();
+  }
+  
+  if (num_z_uniform == 1)
+  {
+    tmp_z = z_uniform(generator);
+  }
+  else if (num_z_uniform == 2)
+  {
+    if (coin >= 0.5)
+    {
+      tmp_z = z_uniform(generator);
+    }
+    else
+    {
+      tmp_z = z_uniform_2(generator);
+    }
+  }else 
+  {
+    std::cout << "A wrong number has been chosen for the how many uniform distribution to use for the altitude. [1 or 2]" << std::endl;
+    ros::shutdown();
+  }
+  set_model_state.request.model_state.pose.position.z = tmp_z;
 
-  tmp_z = distr(generator);
-  //do
-  //{
-    //tmp_z = (rand() % 15); //15meters as maximum altitude
-    //tmp_z = respawn_height;
-  //}while (std::abs(tmp_z) < bb_landing_half_size_);
-  set_model_state.request.model_state.pose.position.z = tmp_z; 
-
-  //cout << set_model_state.request.model_state.pose.position.x << " " << set_model_state.request.model_state.pose.position.y << " " << set_model_state.request.model_state.pose.position.z << endl;
+  
 
   tfScalar roll, pitch, yaw;
   yaw = (rand() % 360);// - 180; // rand() supports only integer
-  //cout << yaw << endl;
   tf::Matrix3x3 m;
   m.setEulerYPR(yaw,pitch,roll);
   tf::Quaternion orientation;

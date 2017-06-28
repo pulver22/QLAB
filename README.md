@@ -84,6 +84,24 @@ To launch the simulation with both the ardrone and the husky model using roslaun
 
     $ roslaunch deep_reinforced_landing drl.launch
 
+
+## Notes
+1 - In order to simplify the tuning of the simulator without the need of recompile it every time,
+a dedicated launch file is offered. It lists various parameters that can be easily
+changed before launching the environment.
+The launch file is located at the following path:
+
+    $ ~/qlab_ws/src/qlab/deep_reinforced_landing/launch/drl.launch
+
+2 - To change or remove the drift affecting the UAV's movements, please modify the following entries
+
+    <motionSmallNoise>0.0</motionSmallNoise>
+    <motionDriftNoise>0.0</motionDriftNoise>
+    <motionDriftNoiseTime>0.0</motionDriftNoiseTime>
+
+located in the following xacro file:
+
+    $ ~/qlab_ws/src/qlab/qlab/cvg_sim_gazebo_plugins/urdf/quadrotor_simple_controller.urdf.xacro
 ## Issues
 
 All kind of issues and contributions will be very welcome. Please get in touch on [our issues page](https://github.com/pulver22/ardrone_tf_controller/issues) when help is needed!
