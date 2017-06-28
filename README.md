@@ -93,7 +93,7 @@ The launch file is located at the following path:
 
     $ ~/qlab_ws/src/qlab/deep_reinforced_landing/launch/drl.launch
 
-2 - To change or remove the drift affecting the UAV's movements, please modify the following entries
+2 - To change or remove the drift affecting the UAV's movements, please modify the following entries (expressed in m/s)
 
     <motionSmallNoise>0.0</motionSmallNoise>
     <motionDriftNoise>0.0</motionDriftNoise>
