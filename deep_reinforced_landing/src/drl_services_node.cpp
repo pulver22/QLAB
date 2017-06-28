@@ -241,19 +241,19 @@ DeepReinforcedLanding::DeepReinforcedLanding()
   service_relative_pose_ = nh_.advertiseService("drl/get_relative_pose", &DeepReinforcedLanding::getRelativePose, this);
   
   // Load parameters from param server
-  nh_.getParam ("/drl/bb_flight_half_size", bb_flight_half_size_ );
-  nh_.getParam ("/drl/bb_flight_height", bb_flight_height_ );
-  nh_.getParam ("/drl/bb_landing_half_size", bb_landing_half_size_ );
-  nh_.getParam ("/drl/bb_landing_height", bb_landing_height_ );
-  nh_.getParam ("/drl/respawn_height", respawn_height );
-  nh_.getParam ("/drl/xy_gaussian_uniform", xy_gaussian_uniform );
-  nh_.getParam ("/drl/xy_gaussian_mean", xy_gaussian_mean );
-  nh_.getParam ("/drl/xy_gaussian_stdev", xy_gaussian_stdev );
-  nh_.getParam ("/drl/num_z_uniform", num_z_uniform );
-  nh_.getParam ("/drl/z_uniform_from", z_uniform_from );
-  nh_.getParam ("/drl/z_uniform_to", z_uniform_to );
-  nh_.getParam ("/drl/z_uniform_from_2", z_uniform_from_2 );
-  nh_.getParam ("/drl/z_uniform_to_2", z_uniform_to_2 );
+  nh_.getParam ("/drl_node/bb_flight_half_size", bb_flight_half_size_ );
+  nh_.getParam ("/drl_node/bb_flight_height", bb_flight_height_ );
+  nh_.getParam ("/drl_node/bb_landing_half_size", bb_landing_half_size_ );
+  nh_.getParam ("/drl_node/bb_landing_height", bb_landing_height_ );
+  nh_.getParam ("/drl_node/respawn_height", respawn_height );
+  nh_.getParam ("/drl_node/xy_gaussian_uniform", xy_gaussian_uniform );
+  nh_.getParam ("/drl_node/xy_gaussian_mean", xy_gaussian_mean );
+  nh_.getParam ("/drl_node/xy_gaussian_stdev", xy_gaussian_stdev );
+  nh_.getParam ("/drl_node/num_z_uniform", num_z_uniform );
+  nh_.getParam ("/drl_node/z_uniform_from", z_uniform_from );
+  nh_.getParam ("/drl_node/z_uniform_to", z_uniform_to );
+  nh_.getParam ("/drl_node/z_uniform_from_2", z_uniform_from_2 );
+  nh_.getParam ("/drl_node/z_uniform_to_2", z_uniform_to_2 );
 
   // With a flight BB having 15m per side, we need a minimum height of 20m for perceiving the marker
   //bb_flight_half_size_ = 6.5;
@@ -492,7 +492,7 @@ gazebo_msgs::SetModelState DeepReinforcedLanding::getModelState()
   } 
   else 
   {
-    std::cout << "A wrong distribution has been chosen (typo?)." << std::endl;
+    ROS_ERROR("A wrong distribution has been chosen (typo?). [uniform or gaussian]");
     ros::shutdown();
   }
   
@@ -512,7 +512,7 @@ gazebo_msgs::SetModelState DeepReinforcedLanding::getModelState()
     }
   }else 
   {
-    std::cout << "A wrong number has been chosen for the how many uniform distribution to use for the altitude. [1 or 2]" << std::endl;
+    ROS_ERROR("A wrong number has been chosen for the how many uniform distribution to use for the altitude. [1 or 2]");
     ros::shutdown();
   }
   set_model_state.request.model_state.pose.position.z = tmp_z;
