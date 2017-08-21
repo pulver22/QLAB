@@ -1,0 +1,127 @@
+<?xml version="1.0" ?>
+<sdf version="1.4">
+  <world name="pond">
+    <!-- A global light source -->
+    <include>
+      <uri>model://sun</uri>
+    </include>
+
+    <gui fullscreen='0'>
+      <camera name='user_camera'>
+        <pose>-14.5433 -158.187 52.9625 7.23354e-17 0.696 1.508</pose>
+        <!--<pose>30 -30 20 0 0.275643 2.35619</pose>-->
+        <view_controller>orbit</view_controller>
+      </camera>
+    </gui>
+
+    <model name='ground_plane'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>100</mu>
+                <mu2>50</mu2>
+              </ode>
+            </friction>
+            <bounce/>
+            <contact>
+              <ode/>
+            </contact>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='visual'>
+          <cast_shadows>1</cast_shadows>
+	  <transparency>0.9</transparency>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Grey</name>
+            </script>
+          </material>
+        </visual>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+      </link>
+    </model>
+    
+    <!-- The models below should be included in kingfisher_gazebo package -->
+    <include>
+      <!-- Note - the pose tag doesn't seem to work for heightmaps, so you need
+      to go into the model file to change the altitutde/height fo the lake!-->
+      <pose> 0 0 5 0 0 0 </pose>
+      <uri>model://models/elestero</uri>
+    </include>
+
+    <!-- Should be at the same height as the water level in USV and buoyancy 
+    plugin configurations -->
+    <include>
+      <pose> 0 0 5 0 0 0 </pose>
+      <uri>model://models/water_plane</uri>
+    </include>
+
+    <model name='Target'>
+      <pose>-24.228 -116.953 5 0 0 0</pose>
+      <static>true</static>
+      <link name='link'>
+        <visual name='visual'>
+	  <transparency>0</transparency>
+          <geometry>
+            <cylinder>
+              <radius>1.0</radius>
+              <length>0.50</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Green</name>
+            </script>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name='Obstacle'>
+      <pose>-23.628 -95.053 5 0 0 0</pose>
+      <static>true</static>
+      <link name='link'>
+        <visual name='visual'>
+	  <transparency>0</transparency>
+          <geometry>
+            <cylinder>
+              <radius>1.0</radius>
+              <length>0.50</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Red</name>
+            </script>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+  </world>
+</sdf>

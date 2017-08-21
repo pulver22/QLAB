@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro"
+       name="kingfisher">
+
+  <!-- Defines the "kingfisher_base" macro -->
+  <xacro:include filename="$(find kingfisher_gazebo)/urdf/kingfisher_urdf.xacro" />
+  <!--<xacro:include filename="$(find kingfisher_gazebo)/urdf/kingfisher_urdf_camera.xacro" />-->
+  <!-- Defines the "usv_gazebo" macro which implements the plugin for USV dynamics -->
+  <xacro:include filename="$(find usv_gazebo_plugins)/urdf/usv_gazebo_dynamics_plugin.xacro" />
+  <!-- Testing old plugin -->
+  <!--<xacro:include filename="$(find kingfisher_plugins)/urdf/kingfisher_plugin.xacro" />-->
+  
+  <!-- Defines the macro for including simulated camera -->
+  <xacro:include filename="$(find kingfisher_gazebo)/urdf/kingfisher_camera.xacro" />
+
+  <!-- Defines the macro for simulated GPS -->
+  <xacro:include filename="$(find kingfisher_gazebo)/urdf/gps_gazebo.xacro" />
+  
+  <!-- Defines the macro for simulated IMU -->
+  <xacro:include filename="$(find kingfisher_gazebo)/urdf/imu_gazebo.xacro" />
+
+  <!-- Macro for P3D ground truth -->
+  <xacro:include filename="$(find kingfisher_gazebo)/urdf/p3d_gazebo.xacro" />
+
+  <!-- Call the macros defined above -->
+  <!-- includes basic description witout plugins -->
+  <!--xacro:kingfisher_base /-->
+  <kingfisher_base/>
+  <!-- USV dynamic model -->
+  <xacro:usv_gazebo name="kingfisher"/>
+
+  <!-- Optional sensor plugins - called by macros defined above -->
+  <xacro:if value="$(arg gps)">
+    <xacro:kingfisher_gps_gazebo name="kingfisher"/>
+  </xacro:if>
+  <xacro:if value="$(arg imu)">
+    <xacro:kingfisher_imu_gazebo name="kingfisher"/>
+  </xacro:if>
+  <xacro:if value="$(arg p3d)">
+    <xacro:kingfisher_p3d_gazebo name="kingfisher"/>
+  </xacro:if>
+
+  <xacro:kingfisher_gazebo_camera name="kingfisher"/>
+
+
+
+</robot>

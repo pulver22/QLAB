@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:macro name="kingfisher_p3d_gazebo" params="name">
+    <gazebo>
+      <plugin name="p3d_plugin_${name}" filename="libgazebo_ros_p3d.so">
+	<bodyName>base_link</bodyName>
+	<frameName>map</frameName>
+	<!--How to define an empty string in xacro?-->
+	<!--<robotNamespace>""</robotNamespace>-->
+	<updateRate>10.0</updateRate>
+	<topicName>p3d_odom</topicName>
+	<xyzOffset>0 0 0</xyzOffset>
+	<rpyOffset>0 0 0</rpyOffset>
+	<gaussianNoise>0</gaussianNoise>-->
+      </plugin>
+    </gazebo>
+  </xacro:macro>
+</robot>

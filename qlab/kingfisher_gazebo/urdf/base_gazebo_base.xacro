@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro"
+       name="kingfisher">
+
+  <!-- Defines the "kingfisher_base" macro -->
+  <xacro:include filename="$(find kingfisher_gazebo)/urdf/kingfisher_urdf_base.xacro" />
+  <!-- Call the macros defined above -->
+  <!-- includes basic description witout plugins -->
+  <xacro:kingfisher_base />
+
+</robot>

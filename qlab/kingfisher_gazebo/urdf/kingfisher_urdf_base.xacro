@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<!-- Modified to minimize inertia terms
+Brian Bingham
+Jan, 2017
+Original copyright below-->
+
+<!--
+Copyright (c) 2012, Clearpath Robotics 
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+    * Neither the name of Clearpath Robotics nor the
+      names of its contributors may be used to endorse or promote products
+      derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+This program contains the description of the robot base model for the Clearpath Kingfisher
+-->
+
+<robot name="kingfisher" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <!-- Included URDF/XACRO Files -->
+  <xacro:include filename="$(find kingfisher_description)/urdf/materials.urdf.xacro" />
+  <!-- Replace original Kingfisher file with new one with minimial inertia-->
+  <xacro:include filename="$(find kingfisher_gazebo)/urdf/parts.mininertia.urdf.xacro" />
+  
+  <!-- PROPERTY LIST -->
+  <!--All units in m-kg-s-radians unit system -->
+  <property name="M_PI" value="3.1415926535897931" />
+  <property name="HH" value="0.09" />
+  <!-- BASE-FOOTPRINT -->
+  <!-- base_fotporint is a fictitious link(frame) that is on the ground right below base_link origin, navigation stack depends on this frame -->
+  <link name="base_footprint">
+    <inertial>
+      <mass value="1e-5" />
+      <origin xyz="0 0 ${HH} " />
+      <inertia ixx="1e-6" ixy="0.0" ixz="0.0"
+	       iyy="1e-6" iyz="0.0" 
+	       izz="1e-6" />
+    </inertial>
+    
+    <visual>
+      <origin xyz="0 0 ${HH}" rpy="0 0 0" />
+      <geometry>
+	<box size="1 1 1" />
+      </geometry>
+    </visual>
+  </link>
+  
+
+  <gazebo reference="base_footprint">
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+</robot>

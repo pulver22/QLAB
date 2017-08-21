@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<launch>
+<!-- Now convert the yaw message from quant2rpy (from gazebo) for controller -->
+<node pkg="ros_utils" type="msg2msg.py" name="msg2msg" output="screen">
+      <param name="input_topic" value="kingfisher_rpy" />      
+      <param name="input_msg_package" value="geometry_msgs" />      
+      <param name="input_msg_type" value="Vector3" />      
+      <param name="input_msg_fields" value="z" />      
+      <param name="output_topic" value="kingfisher_yaw" />      
+      <param name="output_msg_package" value="std_msgs" />      
+      <param name="output_msg_type" value="Float32" />      
+      <param name="output_msg_fields" value="data" />      
+</node>
+</launch>

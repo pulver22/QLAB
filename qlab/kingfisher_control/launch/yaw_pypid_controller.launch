@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<launch>
+
+<node pkg="kingfisher_control" type="kingfisher_yaw_control.py" name="kingfisher_yaw_control">
+  <param name="Kp" value="1.0" type="double"/>
+  <param name="Kd" value="0.5" type="double"/>
+  <param name="Ki" value="0.0" type="double"/>
+</node>
+
+<node pkg="diagnostic_aggregator" type="aggregator_node" name="diagnostic_aggregator" >
+      <rosparam command="delete" param="/diagnostic_aggregator" />
+      <rosparam command="load" file="$(find kingfisher_control)/config/pid_yaw1.yaml" />
+</node>
+
+
+</launch>

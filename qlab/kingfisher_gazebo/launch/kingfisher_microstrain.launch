@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+
+<launch>
+
+ <include file="$(find kingfisher_gazebo)/launch/base_gazebo.launch">
+   <arg name="name" default="kingfisher" />
+   <arg name="imu" default="false" />
+   <arg name="gps" default="false" />
+   <arg name="p3d" default="true" />
+ </include>
+
+ <node pkg="kingfisher_gazebo" type="p3d2nav.py" name="p3d2nav">
+   <param name="gazebo_origin_lat" value="36.6" type="double" />
+   <param name="gazebo_origin_long" value="-121.9" type="double" />
+ </node>
+
+</launch>

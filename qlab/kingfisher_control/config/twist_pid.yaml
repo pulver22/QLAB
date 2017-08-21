@@ -1,0 +1,7 @@
+pub_rate: 4.0
+analyzers:
+  Yaw_PID:
+    type: diagnostic_aggregator/GenericAnalyzer
+    path: 'Yaw PID'
+    timeout: 1.0
+    contains: ['yaw_pid']

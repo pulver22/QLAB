@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>geonav_transform</name>
+  <version>0.0.1</version>
+  <description>The geonav_transform package</description>
+
+  <maintainer email="briansbingham@gmail.com">Brian Bingham</maintainer>
+  <author  email="briansbingham@gmail.com">Brian Bingham</author>
+  <license>GPL</license>
+  <url type="website">https://github.com/bsb808/geonav_transform</url> -->
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>cmake_modules</depend>
+  <depend>roscpp</depend>
+  <depend>rospy</depend>
+  <depend>python-catkin-pkg</depend>
+  <depend>eigen</depend>
+  <depend>geographic_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>nav_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>std_msgs</depend>
+  <depend>tf2</depend>
+  <depend>tf2_geometry_msgs</depend>
+  <depend>tf2_ros</depend>
+
+  <build_depend>robot_localization</build_depend>
+  <export>
+    <rosdoc config="rosdoc.yaml"/>    
+  </export>
+</package>

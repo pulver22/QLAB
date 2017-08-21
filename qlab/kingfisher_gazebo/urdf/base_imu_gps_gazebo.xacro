@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro"
+       name="kingfisher_imu_gps">
+
+  <xacro:include filename="$(find kingfisher_gazebo)/urdf/base_gazebo.xacro" />
+
+  
+</robot>

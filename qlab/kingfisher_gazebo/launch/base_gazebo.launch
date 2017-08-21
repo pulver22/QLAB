@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+
+<launch>
+
+  <!-- For setting debug level to debug -->
+  <env name="ROSCONSOLE_CONFIG_FILE" 
+       value="$(find kingfisher_gazebo)/config/custom_rosconsole.conf"/>
+
+  <!-- Command line arguments -->
+  <arg name="name" default="kingfisher" />
+  <arg name="imu" default="true" />
+  <arg name="gps" default="true" />
+  <arg name="p3d" default="true" />
+  <arg name="microstrain" default="false" />
+  
+  <param name="use_sim_time" value="true" />
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <!--arg name="world_name" value="$(find kingfisher_gazebo)/worlds/lake.world"/-->
+  </include>
+  
+  <arg name="urdf" default="$(find kingfisher_gazebo)/urdf/base_gazebo.xacro"/>
+  <param name="robot_description" command="$(find xacro)/xacro --inorder $(arg urdf) imu:=$(arg imu) gps:=$(arg gps) microstrain:=$(arg microstrain) p3d:=$(arg p3d)"/>
+  
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+  
+  <!-- Spawn robot in gazebo -->
+  <node name="spawn_kingfisher_model" pkg="gazebo_ros" type="spawn_model"
+	args="-x 0.0 -y 0.0 -z 1.0 -R 0.0 -P 0.0 -Y 0.0 -unpause -urdf -param robot_description -model mobile_base"/>
+  
+  <!--
+  <node pkg="rqt_topic" type="rqt_topic" name="rqt_topic" />
+  -->
+
+</launch>

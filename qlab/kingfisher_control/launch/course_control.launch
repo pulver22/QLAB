@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<launch>
+
+<!--<param name="use_sim_time" value="true" />-->
+
+<node pkg="kingfisher_control" type="pid_control.py" name="pid_control" output="screen">
+  <param name="yawKp" value="4.0" type="double"/>
+  <param name="yawKi" value="0.0" type="double"/>
+  <param name="yawKd" value="0.5" type="double"/>
+
+  <param name="velKp" value="1.0" type="double"/>
+  <param name="velKi" value="2.5" type="double"/>
+  <param name="velKd" value="0.0" type="double"/>
+
+  <param name="start_engaged" value="false" type="bool"/>
+  <param name="yaw_cntrl" value="true" type="bool"/>
+  <param name="vel_cntrl" value="true" type="bool"/>
+  
+  <remap from="odometry/nav" to="nav_odom" />
+
+</node>
+	
+<!-- Twist Mux 
+<arg name="config_locks"  default="$(find kingfisher_control)/config/twist_mux_locks.yaml"/>
+<arg name="config_topics" default="$(find kingfisher_control)/config/twist_mux_topics.yaml"/>
+<node pkg="twist_mux" type="twist_mux" name="twist_mux" output="screen">
+  <remap from="cmd_vel_out" to="cmd_vel"/>
+  <rosparam file="$(arg config_locks)"  command="load"/>
+  <rosparam file="$(arg config_topics)" command="load"/>
+</node>
+-->
+
+
+
+</launch>

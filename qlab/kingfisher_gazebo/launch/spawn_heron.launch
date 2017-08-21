@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+
+<launch>
+
+ <param name="use_sim_time" value="true" />
+
+ <include file="$(find gazebo_ros)/launch/empty_world.launch"></include>
+ 
+ <arg name="urdf" default="$(find kingfisher_gazebo)/urdf/base.urdf.xacro" />
+ <param name="robot_description" command="$(find xacro)/xacro --inorder $(arg urdf)"/>
+
+ <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+
+<!-- Spawn robot in gazebo -->
+<node name="spawn_kingfisher_model" pkg="gazebo_ros" type="spawn_model"
+    args="-x 0 -y 0 -z 1 -unpause -urdf -param robot_description -model mobile_base"/>
+
+</launch>

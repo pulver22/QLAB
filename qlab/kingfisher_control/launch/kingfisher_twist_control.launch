@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<launch>
+
+<param name="use_sim_time" value="true" />
+
+<!-- This starts gazebo and spawns the kingfisher sigh the P3D plugin-->
+<include file="$(find kingfisher_gazebo)/launch/base_gazebo.launch">
+   <arg name="name" default="kingfisher" />
+   <arg name="imu" default="false" />
+   <arg name="gps" default="false" />
+   <arg name="p3d" default="true" />
+</include>
+
+<node pkg="kingfisher_gazebo" type="p3d2nav.py" name="p3d2nav" output="screen">
+  <param name="gazebo_origin_lat" value="36.6137" type="double" />
+  <param name="gazebo_origin_long" value="-121.912" type="double" />
+</node>
+
+<node pkg="kingfisher_control" type="kingfisher_twist_control.py" name="kingfisher_twist_control" output="screen">
+  <param name="yawKp" value="0.2" type="double"/>
+  <param name="yawKi" value="0.4" type="double"/>
+  <param name="yawKd" value="0.0" type="double"/>
+
+  <param name="velKp" value="0.7" type="double"/>
+  <param name="velKi" value="0.3" type="double"/>
+  <param name="velKd" value="0.0" type="double"/>
+
+  <remap from="odometry/nav" to="nav_odom" />
+
+</node>
+	
+<!-- Joystick -->
+<node pkg="joy" type="joy_node" name="joy">
+  <param name="dev" value="/dev/input/js0"/>
+  <!--<param name="autorepeat_rate" type="double" value="10.0" />  -->
+</node>
+
+<rosparam file="$(find kingfisher_control)/config/kingfisher_joy.yaml"
+	  command="load"/>	
+<node pkg="joy_teleop" type="joy_teleop.py" name="joy_teleop">
+  <remap from="cmd_vel" to="joy_cmd_vel" />
+</node>
+
+<!-- Twist Mux -->
+<arg name="config_locks"  default="$(find kingfisher_control)/config/twist_mux_locks.yaml"/>
+<arg name="config_topics" default="$(find kingfisher_control)/config/twist_mux_topics.yaml"/>
+<node pkg="twist_mux" type="twist_mux" name="twist_mux" output="screen">
+  <remap from="cmd_vel_out" to="cmd_vel"/>
+  <rosparam file="$(arg config_locks)"  command="load"/>
+  <rosparam file="$(arg config_topics)" command="load"/>
+</node>
+
+
+<!-- diagnostics -->
+<node pkg="rqt_plot" type="rqt_plot" name="pid_errors"
+      args="/yaw_pid_debug/Error /vel_pid_debug/Error"/>
+<node pkg="rqt_robot_monitor" name="rqt_robot_monitor" type="rqt_robot_monitor"/>
+<node pkg="rqt_topic" name="rqt_topic" type="rqt_topic"/>
+<node pkg="rqt_graph" name="rqt_graph" type="rqt_graph"/>
+<node pkg= "rqt_reconfigure" type="rqt_reconfigure" name="rqt_reconfigure"/>
+<!--
+<node pkg="diagnostic_aggregator" type="aggregator_node" name="diagnostic_aggregator" >
+      <rosparam command="delete" param="/diagnostic_aggregator" />
+      <rosparam command="load" file="$(find kingfisher_control)/config/pid_yaw1.yaml" />
+</node>
+-->
+
+
+</launch>

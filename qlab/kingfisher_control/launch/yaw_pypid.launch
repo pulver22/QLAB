@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<launch>
+
+<!--<param name="use_sim_time" value="true" />-->
+
+<!-- This starts gazebo and spawns the kingfisher -->
+<include file="$(find kingfisher_gazebo)/launch/base_gazebo.launch" />
+
+<node pkg="kingfisher_control" type="kingfisher_yaw_control.py" name="kingfisher_yaw_control">
+  <param name="Kp" value="1.0" type="double"/>
+  <param name="Kd" value="0.5" type="double"/>
+  <param name="Ki" value="0.0" type="double"/>
+</node>
+
+<node pkg="diagnostic_aggregator" type="aggregator_node" name="diagnostic_aggregator" >
+      <rosparam command="delete" param="/diagnostic_aggregator" />
+      <rosparam command="load" file="$(find kingfisher_control)/config/pid_yaw1.yaml" />
+</node>
+
+<!-- diagnostics -->
+<node pkg="rqt_robot_monitor" name="rqt_robot_monitor" type="rqt_robot_monitor"/>
+<node pkg="rqt_topic" name="rqt_topic" type="rqt_topic"/>
+<node pkg="rqt_graph" name="rqt_graph" type="rqt_graph"/>
+<node pkg="rqt_reconfigure" type="rqt_reconfigure" name="rqt_reconfigure"/>
+</launch>
