@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="sonar_enabled" default="$(optenv KF_SIM_WITH_SONAR false)" />
+
+  <!-- Send the Kingfisher Robot URDF/XACRO to param server -->
+  <param name="robot_description" command="$(find xacro)/xacro '$(find kingfisher_description)/urdf/standard.urdf.xacro' sonar_enabled:=$(arg sonar_enabled)" />
+
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
+</launch>

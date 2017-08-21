@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package>
+  <name>kingfisher_description</name>
+  <version>0.1.0</version>
+  <description>URDF description for Kingfisher</description>
+
+  <maintainer email="mpurvis@clearpathrobotics.com">Mike Purvis</maintainer>
+  <author email="yanma@clearpathrobotics.com">Yan Ma</author>
+
+  <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>roslaunch</build_depend>
+
+  <run_depend>robot_state_publisher</run_depend>
+  <run_depend>urdf</run_depend>
+  <run_depend>xacro</run_depend>
+
+  <export>
+  </export>
+</package>
