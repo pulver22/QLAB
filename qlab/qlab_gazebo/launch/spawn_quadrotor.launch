@@ -2,7 +2,10 @@
 
 
  <launch>
-   <arg name="model" default="$(find qlab_description)/urdf/quadrotor.urdf.xacro"/>
+   <arg name="name" default="quadrotor"/>
+   <arg name="namespace_arg" default=""/>
+   <!-- <arg name="model" default="$(find qlab_description)/urdf/quadrotor.urdf.xacro"/> -->
+   <arg name="model" default="$(find qlab_description)/urdf/quadrotor_sensors.urdf.xacro"/>
    <arg name="x" default="0"/>
    <arg name="y" default="0"/>
    <arg name="z" default="0.5"/>
@@ -28,12 +31,15 @@
    <!-- start robot state publisher -->
    <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" output="screen" >
      <param name="publish_frequency" type="double" value="50.0" />
-     <param name="tf_prefix" type="string" value="" />
+     <param name="tf_prefix" type="string" value="uav1_tf" />
    </node>
 
    <node name="ground_truth_to_tf" pkg="message_to_tf" type="message_to_tf" output="screen">
-     <param name="odometry_topic" value="ground_truth/state" />
-     <param name="frame_id" value="nav" />
+     <!-- <param name="frame_id" value="nav" /> -->
+     <param name="odometry_topic" value="ground_truth/state" /> <!-- added -->
+     <param name="tf_prefix" type="string" value="uav1_tf/"/>
+     <param name="frame_id" value="uav1_tf/odom" />
+     <param name="child_frame_id" type="string" value="uav1_tf_base_link"/>
    </node>
    <!-- node name="hector_pose_estimation" pkg="hector_pose_estimation" type="hector_pose_estimation_node" output="screen"/-->
 

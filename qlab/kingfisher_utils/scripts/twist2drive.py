@@ -10,8 +10,8 @@ class Node():
         self.linear_scaling = linear_scaling
         self.angular_scaling = angular_scaling
         self.pub = None
-        self.driveMsg =None 
-        
+        self.driveMsg =None
+
     def callback(self,data):
         rospy.logdebug("RX: Twist "+rospy.get_caller_id())
         rospy.logdebug("\tlinear:")
@@ -27,7 +27,7 @@ class Node():
         angfac = self.angular_scaling
         self.driveMsg.left = linfac*data.linear.x - angfac*data.angular.z
         self.driveMsg.right = linfac*data.linear.x + angfac*data.angular.z
-        
+
         rospy.logdebug("TX: Drive ")
         rospy.logdebug("\tleft:%f, right:%f"%(self.driveMsg.left,
                                              self.driveMsg.right))

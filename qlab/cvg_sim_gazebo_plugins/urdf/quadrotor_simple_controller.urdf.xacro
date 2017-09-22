@@ -11,7 +11,7 @@ xmlns:xacro="http://ros.org/wiki/xacro"
       <plugin name="quadrotor_simple_controller" filename="libhector_gazebo_quadrotor_simple_controller.so">
         <alwaysOn>true</alwaysOn>
         <updateRate>0.0</updateRate>
-	<bodyName>base_link</bodyName> 
+	      <bodyName>base_link</bodyName>
         <stateTopic>ground_truth/state</stateTopic>
         <imuTopic>ardrone/imu</imuTopic>
         <topicName>cmd_vel</topicName>
@@ -30,7 +30,7 @@ xmlns:xacro="http://ros.org/wiki/xacro"
         <maxForce>30</maxForce>
         <!--motionSmallNoise>0.05</motionSmallNoise>
         <motionDriftNoise>0.03</motionDriftNoise>
-        <motionDriftNoiseTime>5.0</motionDriftNoiseTime--> 
+        <motionDriftNoiseTime>5.0</motionDriftNoiseTime-->
         <motionSmallNoise>0.0</motionSmallNoise>
         <motionDriftNoise>0.0</motionDriftNoise>
         <motionDriftNoiseTime>0.0</motionDriftNoiseTime>
@@ -45,6 +45,12 @@ xmlns:xacro="http://ros.org/wiki/xacro"
         <sonarTopic>sonar_height</sonarTopic>
         <topicName>cmd_vel</topicName>
       </plugin>
+
+      <!-- Gazebo plugin for ROS Control -->
+      <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+        <robotNamespace>/uav1</robotNamespace>
+      </plugin>
+
     </gazebo>
   </xacro:macro>
 </robot>

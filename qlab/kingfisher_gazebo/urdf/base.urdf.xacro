@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-Copyright (c) 2012, Clearpath Robotics 
+Copyright (c) 2012, Clearpath Robotics
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -28,141 +28,142 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 This program contains the description of the robot base model for the Clearpath Kingfisher
 -->
 
-<robot 
-    xmlns:xi="http://www.w3.org/2001/XInclude"
-    xmlns:gazebo="http://playerstage.sourceforge.net/gazebo/xmlschema/#gz"
-    xmlns:model="http://playerstage.sourceforge.net/gazebo/xmlschema/#model"
-    xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor"
-    xmlns:body="http://playerstage.sourceforge.net/gazebo/xmlschema/#body"
-    xmlns:geom="http://playerstage.sourceforge.net/gazebo/xmlschema/#geom"
-    xmlns:joint="http://playerstage.sourceforge.net/gazebo/xmlschema/#joint"
-    xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller"
-    xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface"
-    xmlns:rendering="http://playerstage.sourceforge.net/gazebo/xmlschema/#rendering"
-    xmlns:renderable="http://playerstage.sourceforge.net/gazebo/xmlschema/#renderable"
-    xmlns:physics="http://playerstage.sourceforge.net/gazebo/xmlschema/#physics"
-    xmlns:xacro="http://ros.org/wiki/xacro" name="kingfisher">
+<robot
+  xmlns:xi="http://www.w3.org/2001/XInclude"
+  xmlns:gazebo="http://playerstage.sourceforge.net/gazebo/xmlschema/#gz"
+  xmlns:model="http://playerstage.sourceforge.net/gazebo/xmlschema/#model"
+  xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor"
+  xmlns:body="http://playerstage.sourceforge.net/gazebo/xmlschema/#body"
+  xmlns:geom="http://playerstage.sourceforge.net/gazebo/xmlschema/#geom"
+  xmlns:joint="http://playerstage.sourceforge.net/gazebo/xmlschema/#joint"
+  xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller"
+  xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface"
+  xmlns:rendering="http://playerstage.sourceforge.net/gazebo/xmlschema/#rendering"
+  xmlns:renderable="http://playerstage.sourceforge.net/gazebo/xmlschema/#renderable"
+  xmlns:physics="http://playerstage.sourceforge.net/gazebo/xmlschema/#physics"
+  xmlns:xacro="http://ros.org/wiki/xacro"
+  name="kingfisher">
 
-    <!-- Included URDF/XACRO Files -->
-    <xacro:include filename="$(find kingfisher_description)/urdf/materials.urdf.xacro" />
-    <xacro:include filename="$(find kingfisher_description)/urdf/parts.urdf.xacro" />
-       
-    <!-- PROPERTY LIST -->
-    <!--All units in m-kg-s-radians unit system -->
-    <property name="M_PI" value="3.1415926535897931" />
+  <!-- Included URDF/XACRO Files -->
+  <xacro:include filename="$(find kingfisher_description)/urdf/materials.urdf.xacro"/>
+  <xacro:include filename="$(find kingfisher_description)/urdf/parts.urdf.xacro"/>
 
-    <!-- BASE-FOOTPRINT -->
-    <!-- base_footprint is a fictitious link(frame) that is on the ground right below base_link origin, navigation stack depends on this frame -->
-    <link name="base_footprint">
-        <inertial>
-            <mass value="0.0001" />
-            <origin xyz="0 0 0" />
-            <inertia ixx="0.0001" ixy="0.0" ixz="0.0"
-                iyy="0.0001" iyz="0.0" 
-                izz="0.0001" />
-        </inertial>
+  <!-- PROPERTY LIST -->
+  <!--All units in m-kg-s-radians unit system -->
+  <property name="M_PI" value="3.1415926535897931"/>
 
-        <visual>
-            <origin xyz="0 0 0" rpy="0 0 0" />
-            <geometry>
-                <box size="0.001 0.001 0.001" />
-            </geometry>
-        </visual>
-    </link>
+  <!-- BASE-FOOTPRINT -->
+  <!-- base_footprint is a fictitious link(frame) that is on the ground right below base_link origin, navigation stack depends on this frame -->
+  <link name="base_footprint">
+    <inertial>
+      <mass value="0.0001"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="0.0001" ixy="0.0" ixz="0.0" iyy="0.0001" iyz="0.0" izz="0.0001"/>
+    </inertial>
 
-    <gazebo reference="base_footprint">
-        <turnGravityOff>false</turnGravityOff>
-    </gazebo>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.001 0.001 0.001"/>
+      </geometry>
+    </visual>
+  </link>
 
-    <joint name="base_footprint_joint" type="fixed">
-    <origin xyz="0 0 0" rpy="0 0 0" />
-        <parent link="base_footprint"/>
-        <child link="base_link" />
-    </joint>
+  <gazebo reference="base_footprint">
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
 
+  <joint name="base_footprint_joint" type="fixed">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <parent link="base_footprint"/>
+    <child link="base_link"/>
+  </joint>
 
-    <!-- BASE-LINK -->
-    <!--Actual body/chassis of the robot-->
-    <link name="base_link">
-        <inertial>
-            <mass value="29" />
-            <!--This is the pose of the inertial reference frame, relative to the link reference frame. The origin of the inertial reference frame needs to be at the center of gravity. The axes of the inertial reference frame do not need to be aligned with the principal axes of the inertia.-->
-            <origin xyz="0 0 0" />
-            <!--The 3x3 rotational inertia matrix. Because the rotational inertia matrix is symmetric, only 6 above-diagonal elements of this matrix are specified here, using the attributes ixx, ixy, ixz, iyy, iyz, izz.-->
-            <inertia ixx="10" ixy="0" ixz="0" iyy="10" iyz="0" izz="10" /> 
-        </inertial>
-        
-        <visual>
-            <origin xyz="0 0 0" rpy="${M_PI/2} 0 ${M_PI/2}" />
-            <geometry>
-                <mesh filename="package://kingfisher_description/meshes/kingfisher_base.stl" />
-            </geometry>
-            <material name="DarkGray" />
-        </visual>
-    
-        <collision>
-          <origin xyz="0 0 0" rpy="0 0 0" />
-          <geometry>
-                <box size = "0.1 0.1 0.1"/> <!--making it slightly bigger in x and z direction-->
-            </geometry>
-        </collision>     
-    </link>
-    <gazebo reference="base_link">
-        <material>Gazebo/FlatBlack</material>
-        <turnGravityOff>false</turnGravityOff>
-    </gazebo>
+  <!-- BASE-LINK -->
+  <!--Actual body/chassis of the robot-->
+  <link name="base_link">
+    <inertial>
+      <mass value="29"/>
+      <!--This is the pose of the inertial reference frame, relative to the link reference frame. The origin of the inertial reference frame needs to be at the center of gravity. The axes of the inertial reference frame do not need to be aligned with the principal axes of the inertia.-->
+      <origin xyz="0 0 0"/>
+      <!--The 3x3 rotational inertia matrix. Because the rotational inertia matrix is symmetric, only 6 above-diagonal elements of this matrix are specified here, using the attributes ixx, ixy, ixz, iyy, iyz, izz.-->
+      <inertia ixx="10" ixy="0" ixz="0" iyy="10" iyz="0" izz="10"/>
+    </inertial>
 
-    <!-- PANEL-LINKS -->
-    <!-- Top Plate -->
-    <kingfisher_part parent="base_footprint" name="left_panel" mesh="left_panel" 
-          translateX="0.0" translateY="-0.35" translateZ="0.05" 
-          rotateX="${M_PI/2}" rotateY="0.0" rotateZ="${M_PI/2}"
-          color="Yellow" />
-    <gazebo reference="base_footprint_left_panel_part">
-        <material>Gazebo/Yellow</material>
-    </gazebo>
+    <visual>
+      <origin xyz="0 0 0" rpy="${M_PI/2} 0 ${M_PI/2}"/>
+      <geometry>
+        <mesh filename="package://kingfisher_description/meshes/kingfisher_base.stl"/>
+      </geometry>
+      <material name="DarkGray"/>
+    </visual>
 
-    <kingfisher_part parent="base_footprint" name="right_panel" mesh="right_panel" 
-          translateX="0.0" translateY="0.35" translateZ="0.05" 
-          rotateX="${M_PI/2}" rotateY="0.0" rotateZ="${-M_PI/2}"
-          color="Yellow" />
-    <gazebo reference="base_footprint_right_panel_part">
-        <material>Gazebo/Yellow</material>
-    </gazebo>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.1 0.1"/>
+        <!--making it slightly bigger in x and z direction-->
+      </geometry>
+    </collision>
+  </link>
+  <gazebo reference="base_link">
+    <material>Gazebo/FlatBlack</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
 
-    <!--Gazebo Plugin for simulating Kingfisher dynamics-->
-    <gazebo>
-      <!--<plugin name="heron_dynamic" filename="libheron_gazebo_plugins.so">-->
-      <plugin name="kingfisher_dynamic" filename="libkingfisher_gazebo_plugins.so">
-        </plugin>
-    </gazebo>
+  <!-- PANEL-LINKS -->
+  <!-- Top Plate -->
+  <kingfisher_part parent="base_footprint" name="left_panel" mesh="left_panel" translateX="0.0" translateY="-0.35" translateZ="0.05" rotateX="${M_PI/2}" rotateY="0.0" rotateZ="${M_PI/2}" color="Yellow"/>
+  <gazebo reference="base_footprint_left_panel_part">
+    <material>Gazebo/Yellow</material>
+  </gazebo>
 
-    <gazebo>
-      <!-- Either plugin should worl -->
-      <!--<plugin name="imu_plugin" filename="libgazebo_ros_imu.so">-->
-      <plugin name="imu_plugin" filename="libhector_gazebo_ros_imu.so">
-	<alwaysOn>true</alwaysOn>
-	<bodyName>base_footprint</bodyName>
-	<xyzOffset>0.0 0.0 0.0</xyzOffset>
-	<rpyOffset>0.0 0.0 0.0</rpyOffset>
-	<topicName>imu</topicName>
-	<serviceName>imu_service</serviceName>
-	<gaussianNoise>0.0</gaussianNoise>
-	<updateRate>20.0</updateRate>
-      </plugin>
-    </gazebo>
+  <kingfisher_part parent="base_footprint" name="right_panel" mesh="right_panel" translateX="0.0" translateY="0.35" translateZ="0.05" rotateX="${M_PI/2}" rotateY="0.0" rotateZ="${-M_PI/2}" color="Yellow"/>
+  <gazebo reference="base_footprint_right_panel_part">
+    <material>Gazebo/Yellow</material>
+  </gazebo>
 
-    <gazebo>
-      <plugin name="gps_plugin" filename="libhector_gazebo_ros_gps.so">
-	<alwaysOn>true</alwaysOn>
-	<bodyName>base_footprint</bodyName>
-	<referenceLatitude>36.6</referenceLatitude>
-	<referenceLongitude>-121.9</referenceLongitude>
-	<referenceAltitude>10.0</referenceAltitude>
-	<topicName>fix</topicName>
-	<gaussianNoise>1.0 2.0 3.0</gaussianNoise>
-	<updateRate>1.0</updateRate>
-      </plugin>
-    </gazebo>
-        
+  <!--Gazebo Plugin for simulating Kingfisher dynamics-->
+  <gazebo>
+    <!--<plugin name="heron_dynamic" filename="libheron_gazebo_plugins.so">-->
+    <plugin name="kingfisher_dynamic" filename="libkingfisher_gazebo_plugins.so"></plugin>
+  </gazebo>
+
+  <gazebo>
+    <!-- Either plugin should worl -->
+    <!--<plugin name="imu_plugin" filename="libgazebo_ros_imu.so">-->
+    <plugin name="imu_plugin" filename="libhector_gazebo_ros_imu.so">
+      <alwaysOn>true</alwaysOn>
+      <bodyName>base_footprint</bodyName>
+      <frameid>usv/base_footprint</frameid>
+      <!-- added -->
+      <xyzOffset>0.0 0.0 0.0</xyzOffset>
+      <rpyOffset>0.0 0.0 0.0</rpyOffset>
+      <topicName>imu</topicName>
+      <serviceName>imu_service</serviceName>
+      <gaussianNoise>0.0</gaussianNoise>
+      <updateRate>20.0</updateRate>
+    </plugin>
+  </gazebo>
+
+  <gazebo>
+    <plugin name="gps_plugin" filename="libhector_gazebo_ros_gps.so">
+      <alwaysOn>true</alwaysOn>
+      <bodyName>base_footprint</bodyName>
+      <frameid>usv/base_footprint</frameid>
+      <!-- added -->
+      <referenceLatitude>36.6</referenceLatitude>
+      <referenceLongitude>-121.9</referenceLongitude>
+      <referenceAltitude>10.0</referenceAltitude>
+      <topicName>fix</topicName>
+      <gaussianNoise>1.0 2.0 3.0</gaussianNoise>
+      <updateRate>1.0</updateRate>
+    </plugin>
+  </gazebo>
+
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so"/>
+    <robotNamespace>/usv</robotNamespace>
+  </plugin>
+
 </robot>

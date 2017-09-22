@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+
+<launch>
+
+  <arg name="paused" default="false"/>
+  <arg name="use_sim_time" default="true"/>
+  <arg name="gui" default="true"/>
+  <arg name="headless" default="false"/>
+  <arg name="debug" default="false"/>
+  <arg name="verbose" default="false"/>
+  <arg name="extra_gazebo_args" default="" />
+  <arg name="spawn_drone" default="true" />
+  <!-- <arg name="world" default="drl_world.world" /> -->
+  <arg name="world" default="elestero.world"/>
+  <!-- set command arguments -->
+  <arg unless="$(arg paused)" name="command_arg1" value=""/>
+  <arg     if="$(arg paused)" name="command_arg1" value="-u"/>
+  <arg unless="$(arg headless)" name="command_arg2" value=""/>
+  <arg     if="$(arg headless)" name="command_arg2" value="-r"/>
+  <arg unless="$(arg verbose)" name="command_arg3" value=""/>
+  <arg     if="$(arg verbose)" name="command_arg3" value="--verbose"/>
+  <arg unless="$(arg debug)" name="script_type" value="gzserver"/>
+  <arg     if="$(arg debug)" name="script_type" value="debug"/>
+
+  <env name="GAZEBO_MODEL_PATH" value="$(find qlab_gazebo):$(optenv GAZEBO_MODEL_PATH)"/>
+
+
+
+  <!-- start gazebo server-->
+  <node name="gazebo" pkg="gazebo_ros" type="$(arg script_type)" respawn="false" output="screen"
+  args="$(arg command_arg1) $(arg command_arg2) $(arg command_arg3) $(find kingfisher_gazebo)/worlds/$(arg world) $(arg extra_gazebo_args)" launch-prefix="$(optenv OPTIRUN_LAUNCH_PREFIX)" />
+
+  <!-- start gui -->
+  <group if="$(arg gui)">
+    <node name="gazebo_gui" pkg="gazebo_ros" type="gzclient" respawn="false" output="screen" launch-prefix="$(optenv OPTIRUN_LAUNCH_PREFIX)" />
+  </group>
+
+  <node pkg="tf" type="static_transform_publisher" name="world_to_usv" args="0 3 0.17775 3.14 0 0 world usv_tf/utm 10" />
+  <node pkg="tf" type="static_transform_publisher" name="world_to_ardrone" args="0 0 0 0 0 0 world uav1_tf/odom 10"/>
+
+  <!-- Spawn simulated quadrotor uav -->
+  <arg name="model" value="$(find qlab_description)/urdf/quadrotor_sensors.urdf.xacro"/>
+  <param name="robot_description" command="$(find xacro)/xacro.py '$(arg model)'"/>
+  <group if="$(arg spawn_drone)" ns="quadrotor">
+    <param name="tf_prefix" value="uav1_tf"/>
+    <include file="$(find qlab_gazebo)/launch/spawn_quadrotor.launch">
+      <arg name="name" value="uav1"/>
+      <arg name="namespace_arg" value="uav1"/>
+      <arg name="x" value="0.0"/>
+      <arg name="y" value="0.0"/>
+      <arg name="z" value="6.5"/>
+    </include>
+  </group>
+
+  <!-- Spawn simulated usv -->
+  <group ns="usv">
+      <param name="tf_prefix" value="usv_tf"/>
+      <!-- Spawn simulated Husky A200 UGV -->
+      <arg name="x" default="0"/>
+      <arg name="y" default="0"/>
+      <arg name="z" default="6.0"/>
+      <arg name="P" default="0"/>
+      <arg name="R" default="0"/>
+      <arg name="Y" default="0"/>
+
+      <!-- Starts gazebo with El Estero world, spawns Kingfisher, etc -->
+      <include file="$(find kingfisher_gazebo)/launch/kingfisher_gazebo_worlds.launch">
+        <arg name="world" value="$(arg world)"/>
+        <arg name="x" value="$(arg x)"/>
+        <arg name="y" value="$(arg y)"/>
+        <arg name="z" value="$(arg z)"/>
+        <arg name="P" value="$(arg P)"/>
+        <arg name="R" value="$(arg R)"/>
+        <arg name="Y" value="$(arg Y)"/>
+        <!--<arg name="world" value="elestero_potentials.world"/>-->
+      </include>
+
+      <!-- Takes output from P3D Gazebo plugin to simulate Microstrain Nav. -->
+      <node pkg="kingfisher_gazebo" type="p3d2nav.py" name="p3d2nav">
+        <param name="gazebo_origin_lat" value="36.596524" type="double"/>
+        <param name="gazebo_origin_long" value="-121.888169" type="double"/>
+      </node>
+
+      <!-- Converts Lat/Lon from Microstrain to local X/Y -->
+      <node pkg="geonav_transform" type="geonav_transform_node" name="geonav_transform_node" clear_params="true" output="screen">
+        <!-- Datum as latitude, longitude [decimal deg.], yaw [ENU, degrees] -->
+        <rosparam param="datum">[36.595, -121.89, 0.0]</rosparam>
+        <param name="tf_prefix" type="string" value="usv_tf"/>
+        <param name="base_link_frame_id" value="base_footprint"/>
+      </node>
+
+  </group>
+
+  <node pkg="kingfisher_utils" type="twist2drive.py" name="twist2drive">
+    <remap from="cmd_drive" to="usv/cmd_drive" />
+  </node>
+
+</launch>

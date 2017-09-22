@@ -9,7 +9,7 @@
 	<bodyName>base_link</bodyName>
 	<topicName>imu/data</topicName>
 	<serviceName>imu_service</serviceName>
-	<frame_id>odom</frame_id>
+	<frame_id>usv/odom</frame_id> <!-- added usv/ -->
 	<alwaysOn>true</alwaysOn>
 
 	<accelOffset>0.0 0.0 0.0</accelOffset>

@@ -9,13 +9,13 @@
   <xacro:include filename="$(find usv_gazebo_plugins)/urdf/usv_gazebo_dynamics_plugin.xacro" />
   <!-- Testing old plugin -->
   <!--<xacro:include filename="$(find kingfisher_plugins)/urdf/kingfisher_plugin.xacro" />-->
-  
+
   <!-- Defines the macro for including simulated camera -->
   <xacro:include filename="$(find kingfisher_gazebo)/urdf/kingfisher_camera.xacro" />
 
   <!-- Defines the macro for simulated GPS -->
   <xacro:include filename="$(find kingfisher_gazebo)/urdf/gps_gazebo.xacro" />
-  
+
   <!-- Defines the macro for simulated IMU -->
   <xacro:include filename="$(find kingfisher_gazebo)/urdf/imu_gazebo.xacro" />
 
@@ -42,6 +42,11 @@
 
   <xacro:kingfisher_gazebo_camera name="kingfisher"/>
 
-
+  <!-- Gazebo plugin for ROS Control -->
+    <gazebo>
+      <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+        <robotNamespace>/usv</robotNamespace>
+      </plugin>
+    </gazebo>
 
 </robot>

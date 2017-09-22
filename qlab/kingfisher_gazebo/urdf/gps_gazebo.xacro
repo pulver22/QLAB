@@ -6,7 +6,7 @@
 	<updateRate>1.0</updateRate>
 	<alwaysOn>true</alwaysOn>
 	<bodyName>base_link</bodyName>
-	<frameId>base_link</frameId>
+	<frameId>usv/base_link</frameId> <!-- added usv/ -->
 	<topicName>gps/fix</topicName>
 	<velocityTopicName>fix_velocity</velocityTopicName>
 
@@ -23,6 +23,6 @@
 	<velocityGaussianNoise>0.0 0.0 0.0</velocityGaussianNoise>
 
       </plugin>
-    </gazebo>  
+    </gazebo>
   </xacro:macro>
 </robot>
