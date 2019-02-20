@@ -36,6 +36,7 @@ public:
   */
   double assignReward(geometry_msgs::Pose quadrotor_pose, BoundingBox bb_land, BoundingBox bb_flight, bool *done);
   double assignRewardWithoutFlightBB(geometry_msgs::Pose quadrotor_pose, BoundingBox bb_land, BoundingBox bb_flight, bool *done);
+  double assignRewardWithoutFlightBB(geometry_msgs::Pose quadrotor_pose, BoundingBox bb_land, BoundingBox bb_flight, bool *done, std::string action, bool *wrong_altitude);
   double assignRewardWhenLanding(geometry_msgs::Pose quadrotor_pose, BoundingBox bb_land, BoundingBox bb_flight, bool *done, std::string action);
 
 protected:

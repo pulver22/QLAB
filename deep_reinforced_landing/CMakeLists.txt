@@ -17,6 +17,10 @@ find_package(catkin REQUIRED COMPONENTS
 find_package(OpenCV REQUIRED
 )
 
+
+## Uncomment if the package has a setup.py
+catkin_python_setup()
+
 add_message_files(DIRECTORY msg
   FILES
   reward_req.msg
@@ -67,13 +71,25 @@ target_link_libraries(drl_services
    utilities
 )
 
+
+add_executable(drl_services_uav src/drl_services_real_uav.cpp)
+target_link_libraries(drl_services_uav
+   ${catkin_LIBRARIES}
+   boundingBox
+   utilities
+)
+
 ## Build service client and server
 # %Tag(SRVCLIENT)%
 #add_executable(reward_server src/reward_node.cpp)
 #target_link_libraries(reward_server ${catkin_LIBRARIES})
 add_dependencies(drl_services ${catkin_EXPORTED_TARGETS})
+add_dependencies(drl_services_uav ${catkin_EXPORTED_TARGETS})
 #add_dependencies(drl deep_reinforced_landing_gencpp)
 # %EndTag(SRVCLIENT)%
+
+catkin_install_python(PROGRAMS src/detection/detection_human_pilot.py
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
 
 
