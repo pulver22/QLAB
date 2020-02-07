@@ -16,6 +16,7 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   std_msgs
   cv_bridge
+  cvg_sim_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -91,7 +92,7 @@ catkin_package(
 #  INCLUDE_DIRS include
   LIBRARIES diffdrive_plugin_6w reset_plugin hector_gazebo_ros_imu hector_gazebo_ros_magnetic hector_gazebo_ros_gps hector_gazebo_ros_sonar hector_gazebo_ros_baro hector_gazebo_quadrotor_simple_controller hector_gazebo_quadrotor_state_controller
  CATKIN_DEPENDS image_transport
- DEPENDS system_lib
+#  DEPENDS system_lib
 )
 
 ###########

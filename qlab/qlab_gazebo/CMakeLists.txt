@@ -86,6 +86,17 @@ find_package(catkin REQUIRED)
 #   cfg/DynReconf2.cfg
 # )
 
+##################################
+## Update the GAZEBO_MODEL_PATH ##
+##################################
+
+if(CMAKE_HOST_UNIX)
+  catkin_add_env_hooks(90.gazebo_models_qlab SHELLS sh DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/env-hooks)
+else()
+  message(FATAL_ERROR "Only UNIX builds supported.")
+#  catkin_add_env_hooks(90.gazebo_models_oru SHELLS bat DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/env-hooks)
+endif()
+
 ###################################
 ## catkin specific configuration ##
 ###################################

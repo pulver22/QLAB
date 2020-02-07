@@ -98,11 +98,10 @@ generate_messages(
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
+ INCLUDE_DIRS include
 #  LIBRARIES cvg_sim_msgs
-#  CATKIN_DEPENDS geometry_msgs
 #  DEPENDS system_lib
-CATKIN_DEPENDS message_runtime
+  CATKIN_DEPENDS geometry_msgs message_runtime
 )
 
 ###########
@@ -126,7 +125,7 @@ include_directories(
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
-# add_dependencies(cvg_sim_msgs_node cvg_sim_msgs_generate_messages_cpp)
+# add_dependencies(cvg_sim_msgs cvg_sim_msgs_generate_messages_cpp)
 
 ## Specify libraries to link a library or executable target against
 # target_link_libraries(cvg_sim_msgs_node
