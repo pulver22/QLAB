@@ -31,12 +31,7 @@ At any time you might need to install some more specific dependencies (like some
 ### 1 - Install ROS
 Install ros full desktop following the installation instructions on the official ros website: www.ros.org (tested on indigo, jade and kinetic)
 
-### 2 - Install the ardrone_autonomy package
-If you are on Ubuntu simply write on your console:
-
-    $ sudo apt-get install ros-<your-ros-distribution>-ardrone-autonomy
-
-### 3 - Create a catkin workspace
+### 2 - Create a catkin workspace
 If you don't have it already, create a catkin workspace folder (for more informations look at this link: http://wiki.ros.org/ROS/Tutorials/InstallingandConfiguringROSEnvironment):
 
     $ mkdir qlab_ws
@@ -56,12 +51,18 @@ Now source your new setup.bash file inside your .bashrc:
     $ echo "source <your_catkin_ws_directory>/devel/setup.bash" >> ~/.bashrc
     $ source ~/.bashrc
 
-
-### 4 - Clone the git repository
+### 3 - Clone the git repository
 Clone the git repository inside your catkin workspace src directory:
 
     $ cd <your_catkin_ws_directory>/src
     $ git clone https://github.com/pulver22/qlab.git
+    
+    
+### 4 - Install the dependencies missing (ardrone_autonomy) package
+Move to the root of the repository first and then invoke rosdep:
+ 
+    $ cd ..
+    $ rosdep install --from-paths src --ignore-src -r -y
 
 ## Compile
 
