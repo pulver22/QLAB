@@ -167,6 +167,7 @@ def generate_new_world(model_to_add):
         print "Ground choosen is " + str(model_to_add)
         
     # Spawn new istances for the new model
+    rospy.wait_for_service('/gazebo/spawn_sdf_model')
     try:
         os.system("rosrun gazebo_ros spawn_model -file /home/pulver/.gazebo/models/" + model_to_add +"/model.sdf -sdf -model " + model_to_add + "_plane -x 0 -y 0")
     except: 
