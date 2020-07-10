@@ -184,7 +184,12 @@ def generate_new_world(model_to_add, ground_list):
     print "\n"
     rospy.logwarn( "Ground choosen is " + str(model_to_add) )   
     # Spawn new istances for the new model
-    os.system("rosrun gazebo_ros spawn_model -file ~/.gazebo/models/" + model_to_add +"/model.sdf -sdf -model " + model_to_add + "_plane -x 0 -y 0")
+    rospy.wait_for_service('/gazebo/spawn_sdf_model')
+    try：
+        os.system("rosrun gazebo_ros spawn_model -file ~/.gazebo/models/" + model_to_add +"/model.sdf -sdf -model " + model_to_add + "_plane -x 0 -y 0")
+    except: 
+        print "Impossible to import the ground"
+        rospy.signal_shutdown("Shutdown!")
 
 def update_quadrotor_pose(quadrotor_pose, done_reward):
     """
